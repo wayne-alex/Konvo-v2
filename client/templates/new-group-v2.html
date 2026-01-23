@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Create Group | Konvo</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            font-size: 13px;
+        }
+
+        .app-container {
+            margin-top: 20px;
+        }
+
+        .card {
+            border-radius: 10px;
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+        }
+
+        .search-container input {
+            border-radius: 25px;
+        }
+
+        .section h5 {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .selected-users {
+            display: flex;
+            overflow-x: auto;
+            padding: 10px 0;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .selected-user {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 60px;
+        }
+
+        .selected-user img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-bottom: 5px;
+        }
+
+        .selected-user span {
+            font-size: 11px;
+            text-align: center;
+            max-width: 60px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .user-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .user-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .user-item img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .user-info {
+            flex-grow: 1;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .user-about {
+            font-size: 12px;
+            color: #666;
+            margin: 0;
+        }
+
+        .checkbox-wrapper {
+            margin-left: 10px;
+        }
+
+        .floating-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .selected-user {
+            position: relative;
+        }
+
+        .remove-user {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #dc3545;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            cursor: pointer;
+            border: 2px solid white;
+        }
+
+        .selected-users:empty::before {
+            content: 'No users selected';
+            color: #666;
+            font-style: italic;
+        }
+
+        /* Group Details Styles */
+        .group-details {
+            display: none;
+        }
+
+        .group-image-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin-right: 15px;
+        }
+
+        .group-image {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: #e9ecef;
+            border: 1px solid #dee2e6;
+        }
+
+        .image-upload-label {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: #007bff;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid white;
+        }
+
+        .image-upload {
+            display: none;
+        }
+
+        .group-name-input {
+            border: none;
+            border-bottom: 2px solid #007bff;
+            border-radius: 0;
+            padding: 10px 0;
+            font-size: 1.1rem;
+            background: transparent;
+        }
+
+        .group-name-input:focus {
+            box-shadow: none;
+            border-color: #0056b3;
+        }
+
+        .members-count {
+            color: #666;
+            font-size: 1rem;
+            margin: 20px 0 10px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="app-container container-fluid">
+    <div class="row h-100">
+        <div class="col-12 p-0">
+            <div class="card">
+                <div class="card-body">
+                    <!-- Back Button and Title -->
+                    <div class="d-flex align-items-center mb-4">
+                        <a href="{% url 'newChat-v2' %}" class="btn btn-link">
+                            <i class="fas fa-arrow-left"></i>
+                        </a>
+                        <h3 class="chat-title">New Group</h3>
+                    </div>
+
+                    <!-- User Selection View -->
+                    <div id="userSelectionView">
+                        <!-- Search Box -->
+                        <div class="search-container">
+                            <div class="input-group rounded">
+                                <input
+                                        type="search"
+                                        class="form-control"
+                                        placeholder="Search users"
+                                        aria-label="Search"
+                                        aria-describedby="search-addon"
+                                />
+                                <span class="input-group-text" id="search-addon">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="selected-users">
+                            <!-- Selected users will be dynamically added here -->
+                        </div>
+
+                        <!-- Users List -->
+                        <div class="section">
+                            <h5>Users on Konvo</h5>
+                            <ul class="user-list">
+                                {% for profile in profiles %}
+                                    <li class="user-item" data-user-id="{{ profile.user.id }}"
+                                        data-user-name="{{ profile.user.first_name }} {{ profile.user.last_name }}"
+                                        data-user-image="{{ profile.profile_picture }}">
+                                        <img src="{{ profile.profile_picture }}" alt="{{ profile.user.first_name }}">
+                                        <div class="user-info">
+                                            <div class="user-name">{{ profile.user.first_name }} {{ profile.user.last_name }}</div>
+                                            <p class="user-about">{{ profile.about|default:"Hey there! I'm using Konvo" }}</p>
+                                        </div>
+                                        <div class="checkbox-wrapper">
+                                            <input type="checkbox" class="form-check-input"
+                                                   id="user-{{ profile.user.id }}">
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Group Details View -->
+                    <div id="groupDetailsView" class="group-details">
+                        <!-- Group Info Section -->
+                        <div class="d-flex align-items-end mb-4">
+                            <!-- Group Image Upload -->
+                            <div class="group-image-container">
+                                <img src="/api/placeholder/80/80" alt="Group" class="group-image" id="groupImage">
+                                <label for="imageUpload" class="image-upload-label">
+                                    <i class="fas fa-camera"></i>
+                                </label>
+                                <input type="file" id="imageUpload" class="image-upload" accept="image/*">
+                            </div>
+
+                            <!-- Group Name Input -->
+                            <div class="flex-grow-1">
+                                <input type="text" class="form-control group-name-input"
+                                       placeholder="Group name" aria-label="Group name">
+                            </div>
+                        </div>
+
+                        <!-- Members Section -->
+                        <div class="members-count">
+                            Members (<span id="memberCount">0</span>)
+                        </div>
+
+                        <!-- Members List -->
+                        <ul class="member-list user-list" id="selectedMembersList">
+                            <!-- Selected members will be shown here -->
+                        </ul>
+                    </div>
+
+                    <!-- Forward/Create Button -->
+                    <button class="floating-button" id="actionButton">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+
+<script>
+    // Store selected users and current view state
+    document.addEventListener('DOMContentLoaded', function () {
+        // Store selected users and current view state
+        let selectedUsers = new Set();
+        let currentView = 'selection'; // 'selection' or 'details'
+        const selectedUsersContainer = document.querySelector('.selected-users');
+        const userSelectionView = document.querySelector('#userSelectionView');
+        const groupDetailsView = document.querySelector('#groupDetailsView');
+        const actionButton = document.querySelector('#actionButton');
+
+        // Function to create selected user element
+        function createSelectedUserElement(userId, userName, userImage) {
+            const userElement = document.createElement('div');
+            userElement.className = 'selected-user';
+            userElement.dataset.userId = userId;
+            userElement.innerHTML = `
+            <img src="${userImage}" alt="${userName}">
+            <span>${userName.split(' ')[0]}</span>
+            <div class="remove-user">
+                <i class="fas fa-times"></i>
+            </div>
+        `;
+
+            userElement.querySelector('.remove-user').addEventListener('click', (e) => {
+                e.stopPropagation();
+                removeUser(userId);
+            });
+
+            return userElement;
+        }
+
+        // Function to add user to selected section
+        function addUser(userId, userName, userImage) {
+            if (!selectedUsers.has(userId)) {
+                selectedUsers.add({
+                    id: userId,
+                    name: userName,
+                    image: userImage
+                });
+                const userElement = createSelectedUserElement(userId, userName, userImage);
+                selectedUsersContainer.appendChild(userElement);
+
+                // Check the corresponding checkbox
+                const checkbox = document.querySelector(`#user-${userId}`);
+                if (checkbox) checkbox.checked = true;
+
+                // Show action button if users are selected
+                actionButton.style.display = 'flex';
+            }
+        }
+
+        // Function to remove user from selected section
+        function removeUser(userId) {
+            const userElement = selectedUsersContainer.querySelector(`[data-user-id="${userId}"]`);
+            if (userElement) {
+                userElement.remove();
+                selectedUsers.delete(Array.from(selectedUsers).find(u => u.id === userId));
+
+                // Uncheck the corresponding checkbox
+                const checkbox = document.querySelector(`#user-${userId}`);
+                if (checkbox) checkbox.checked = false;
+
+                // Hide action button if no users are selected
+                if (selectedUsers.size === 0) {
+                    actionButton.style.display = 'none';
+                }
+            }
+        }
+
+        // Handle view switching
+        function switchView(view) {
+            currentView = view;
+            if (view === 'selection') {
+                userSelectionView.style.display = 'block';
+                groupDetailsView.style.display = 'none';
+                actionButton.innerHTML = '<i class="fas fa-arrow-right"></i>';
+            } else {
+                userSelectionView.style.display = 'none';
+                groupDetailsView.style.display = 'block';
+                actionButton.innerHTML = '<i class="fas fa-check"></i>';
+
+                // Update members count
+                document.getElementById('memberCount').textContent = selectedUsers.size;
+
+                // Populate members list
+                const membersList = document.getElementById('selectedMembersList');
+                membersList.innerHTML = '';
+                selectedUsers.forEach(user => {
+                    membersList.innerHTML += `
+                    <li class="user-item">
+                        <img src="${user.image}" alt="${user.name}">
+                        <div class="user-info">
+                            <div class="user-name">${user.name}</div>
+                        </div>
+                    </li>
+                `;
+                });
+            }
+        }
+
+        // Handle user selection
+        document.querySelectorAll('.user-item').forEach(item => {
+            item.addEventListener('click', function (e) {
+                if (e.target.closest('.remove-user')) return;
+
+                const userId = this.dataset.userId;
+                const userName = this.dataset.userName;
+                const userImage = this.dataset.userImage;
+                const checkbox = this.querySelector('input[type="checkbox"]');
+
+                if (checkbox.checked) {
+                    removeUser(userId);
+                } else {
+                    addUser(userId, userName, userImage);
+                }
+
+                if (e.target.type !== 'checkbox') {
+                    checkbox.checked = !checkbox.checked;
+                }
+            });
+        });
+
+        // Add search functionality
+        const searchInput = document.querySelector('.search-container input');
+        searchInput.addEventListener('input', function (e) {
+            const searchTerm = e.target.value.toLowerCase();
+
+            document.querySelectorAll('.user-item').forEach(item => {
+                const userName = item.dataset.userName.toLowerCase();
+                const shouldShow = userName.includes(searchTerm);
+                item.style.display = shouldShow ? '' : 'none';
+            });
+        });
+
+        // Handle image upload preview
+        const imageUpload = document.getElementById('imageUpload');
+        const groupImage = document.getElementById('groupImage');
+
+        imageUpload.addEventListener('change', function (e) {
+            if (e.target.files && e.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    groupImage.src = e.target.result;
+                }
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+
+        // Handle action button click (forward/create)
+        actionButton.addEventListener('click', function () {
+            if (currentView === 'selection' && selectedUsers.size > 0) {
+                switchView('details');
+            } else if (currentView === 'details') {
+                // Handle group creation
+                const groupNameInput = document.querySelector('.group-name-input');
+
+                // Validate group name
+                if (!groupNameInput.value.trim()) {
+                    alert('Please enter a group name');
+                    groupNameInput.focus();
+                    return;
+                }
+
+                // Create form data
+                const formData = new FormData();
+                formData.append('name', groupNameInput.value.trim());
+                formData.append('members', JSON.stringify(Array.from(selectedUsers)));
+
+                if (imageUpload.files[0]) {
+                    formData.append('image', imageUpload.files[0]);
+                }
+
+                // Submit form
+                fetch('{% url 'createGroup-v2' %}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            window.location.href = `/chat/group/${data.groupId}`;
+                        } else {
+                            alert(data.error || 'Failed to create group');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error creating group:', error);
+                        alert('An error occurred while creating the group');
+                    });
+            }
+        });
+
+        // Handle back button click
+        document.querySelector('.btn-link').addEventListener('click', function (e) {
+            e.preventDefault();
+            if (currentView === 'details') {
+                switchView('selection');
+            } else {
+                window.history.back();
+            }
+        });
+
+        // Initialize view
+        switchView('selection');
+        // Hide action button initially
+        actionButton.style.display = 'none';
+    });
+</script>
+</body>
+</html>

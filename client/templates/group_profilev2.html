@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Create Group | Konvo</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            font-size: 13px;
+        }
+
+        .app-container {
+            margin-top: 20px;
+        }
+
+        .card {
+            border-radius: 10px;
+        }
+
+        .chat-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .group-image-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin-right: 15px;
+        }
+
+        .group-image {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: #e9ecef;
+            border: 1px solid #dee2e6;
+        }
+
+        .image-upload-label {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: #007bff;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid white;
+        }
+
+        .image-upload {
+            display: none;
+        }
+
+        .group-name-input {
+            border: none;
+            border-bottom: 2px solid #007bff;
+            border-radius: 0;
+            padding: 10px 0;
+            font-size: 1.1rem;
+            background: transparent;
+        }
+
+        .group-name-input:focus {
+            box-shadow: none;
+            border-color: #0056b3;
+        }
+
+        .members-count {
+            color: #666;
+            font-size: 1rem;
+            margin: 20px 0 10px 0;
+        }
+
+        .member-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .member-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .member-image {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .member-name {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .floating-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+<div class="app-container container-fluid">
+    <div class="row h-100">
+        <div class="col-12 p-0">
+            <div class="card">
+                <div class="card-body">
+                    <!-- Header -->
+                    <div class="d-flex align-items-center mb-4">
+                        <a href="{% url 'newGroup-v2' %}" class="btn btn-link">
+                            <i class="fas fa-arrow-left"></i>
+                        </a>
+                        <h3 class="chat-title">New Group</h3>
+                    </div>
+
+                    <!-- Group Info Section -->
+                    <div class="d-flex align-items-end mb-4">
+                        <!-- Group Image Upload -->
+                        <div class="group-image-container">
+                            <img src="/api/placeholder/80/80" alt="Group" class="group-image" id="groupImage">
+                            <label for="imageUpload" class="image-upload-label">
+                                <i class="fas fa-camera"></i>
+                            </label>
+                            <input type="file" id="imageUpload" class="image-upload" accept="image/*">
+                        </div>
+
+                        <!-- Group Name Input -->
+                        <div class="flex-grow-1">
+                            <input type="text" class="form-control group-name-input"
+                                   placeholder="Group name" aria-label="Group name">
+                        </div>
+                    </div>
+
+                    <!-- Members Section -->
+                    <div class="members-count">
+                        Members [{{ selected_members|length }}]
+                    </div>
+
+                    <!-- Members List -->
+                    <ul class="member-list">
+                        {% for member in selected_members %}
+                        <li class="member-item">
+                            <img src="{{ member.profile_picture }}"
+                                 alt="{{ member.user.first_name }}"
+                                 class="member-image">
+                            <span class="member-name">
+                                {{ member.user.first_name }} {{ member.user.last_name }}
+                            </span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+
+                    <!-- Create Group Button -->
+                    <button class="floating-button">
+                        <i class="fas fa-check"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+
+<script>
+    // Handle image upload preview
+    const imageUpload = document.getElementById('imageUpload');
+    const groupImage = document.getElementById('groupImage');
+
+    imageUpload.addEventListener('change', function(e) {
+        if (e.target.files && e.target.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                groupImage.src = e.target.result;
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        }
+    });
+
+    // Form submission
+    const createGroupButton = document.querySelector('.floating-button');
+    createGroupButton.addEventListener('click', function() {
+        const formData = new FormData();
+        formData.append('name', document.querySelector('.group-name-input').value);
+        formData.append('image', imageUpload.files[0]);
+
+        // Add your form submission logic here
+        console.log('Creating group...');
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,428 @@
+{% extends 'base_chats.html' %}
+
+
+{% block slide1 %}
+    <header>
+        <a href="" class="logo">Communities</a>
+        <div class="action">
+            <a href="">
+                <ion-icon name="camera-outline"></ion-icon>
+            </a>
+            <div class="dropdown">
+                <a href="">
+                    <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+                </a>
+                <div class="dropdown-content" id="ellipsisDropdown">
+                    <a href="#" tabindex="0" class="dropdown-item">New Group</a>
+                    <hr>
+                    <a href="#" tabindex="0" class="dropdown-item">New Broadcast</a>
+                    <hr>
+                    <a href="#" tabindex="0" class="dropdown-item">Linked Devices</a>
+                    <hr>
+                    <a href="#" tabindex="0" class="dropdown-item">Starred Messages</a>
+                    <hr>
+                    <a href="#" tabindex="0" class="dropdown-item">Settings</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="box community">
+        <div class="data">
+            <div class="chatlist">
+                <div class="block">
+                    <div class="details">
+                        <div class="listhead">
+                            <ion-icon name="people-outline" class="user"></ion-icon>
+                            <h4>New Community</h4>
+                            <div class="plus1">+</div>
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block slide2 %}
+    <style>
+        .fab {
+            position: fixed;
+            bottom: 15%; /* Adjusted to bottom */
+            right: 10%; /* Adjusted to right */
+            z-index: 1000;
+            border-radius: 20%;
+            width: 60px;
+            height: 60px;
+            background-color: #25d366;
+            color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .fab:hover {
+            background-color: #15c25a;
+        }
+
+        @media screen and (max-width: 768px) {
+            .fab {
+                bottom: 17%; /* Adjusted to bottom */
+                right: 3%; /* Adjusted to right */
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+                z-index: 1001; /* Increased z-index */
+            }
+        }
+
+
+    </style>
+
+    <header>
+        <a href="" class="logo">Konvo</a>
+        <div class="action">
+            <a href="">
+                <ion-icon name="camera-outline"></ion-icon>
+            </a>
+            <a href="">
+                <ion-icon name="search-outline"></ion-icon>
+            </a>
+            <div class="dropdown">
+                <a href="">
+                    <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+                </a>
+                <div class="dropdown-content" id="ellipsisDropdown">
+                    <a href="#" tabindex="0" class="dropdown-item">New Group</a>
+                    <hr>
+                    <a href="#" tabindex="0" class="dropdown-item">New Broadcast</a>
+                    <hr>
+                    <a href="#" tabindex="0" class="dropdown-item">Linked Devices</a>
+                    <hr>
+                    <a href="#" tabindex="0" class="dropdown-item">Starred Messages</a>
+                    <hr>
+                    <a href="#" tabindex="0" class="dropdown-item">Settings</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="box chats">
+        <div class="data">
+            {% for chat_info in chat_previews %}
+                <div
+                        style="display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #ccc; cursor: pointer;"
+                        onclick="window.location.href='{% url 'open_chat' chat_info.chat.id %}'">
+                    <!-- Profile Picture -->
+                    <div style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px; overflow: hidden;">
+                        <img src="{{ chat_info.profile_picture }}" alt="Profile Picture"
+                             style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+
+                    <!-- Text content -->
+                    <div style="flex-grow: 1;">
+                        <div style="font-weight: bold; color: black;">{{ chat_info.user_name }}</div>
+                        <div style="color: #333; font-size: 12px;">
+                            {{ chat_info.recent_message.content|default:"No messages yet" }}
+                        </div>
+                    </div>
+
+                    <!-- Time and unread count stacked vertically -->
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <!-- Time -->
+                        <div style="font-size: 10px; color: #25D366; text-align: center; margin-bottom: 5px;">
+                            {{ chat_info.sent_time }}
+                        </div>
+
+                        <!-- Unread count -->
+                        {% if chat_info.unread_count > 0 %}
+                            <div style="background-color: #25D366; color: #fff; border-radius: 50%; width: 20px; height: 20px; display: flex; justify-content: center; align-items: center; font-size: 12px;">
+                                {{ chat_info.unread_count }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+
+    </div>
+    <a href="{% url 'select_user' %}" class="fab1" style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px; /* This ensures the button is aligned to the right */
+    background-color: #25D366;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    font-size: 24px;
+    z-index: 1000;">
+        <ion-icon name="chatbubble-outline"></ion-icon>
+    </a>
+
+
+{% endblock %}
+
+{% block slide3 %}
+    <header>
+        <a href="" class="logo">Updates</a>
+        <div class="action">
+            <a href="">
+                <ion-icon name="camera-outline"></ion-icon>
+            </a>
+            <a href="">
+                <ion-icon name="search-outline"></ion-icon>
+            </a>
+            <div class="dropdown">
+                <a href="">
+                    <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+                </a>
+                <div class="dropdown-content" id="ellipsisDropdown">
+                    <a href="#" tabindex="0" class="dropdown-item">New Group</a>
+                    <hr>
+                    <a href="#" tabindex="0" class="dropdown-item">New Broadcast</a>
+                    <hr>
+                    <a href="#" tabindex="0" class="dropdown-item">Linked Devices</a>
+                    <hr>
+                    <a href="#" tabindex="0" class="dropdown-item">Starred Messages</a>
+                    <hr>
+                    <a href="#" tabindex="0" class="dropdown-item">Settings</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="box updates">
+        <div class="data">
+            <div class="chatlist">
+                <div class="block">
+                    <div class="details">
+                        <div class="listhead">
+                            <h4>Status</h4>
+                            <p class="symbol">
+                                <a href=""
+                                >
+                                    <ion-icon name="ellipsis-vertical-outline"></ion-icon
+                                    >
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="block1">
+                    <div class="status">
+                        <div class="imgbx">
+                            <img
+                                    src="images/67ca404ae0ef09946eff92d268906eee.jpg"
+                                    alt=""
+                            />
+                        </div>
+                        <div class="plus">+</div>
+                        <div class="imgbx unseen">
+                            <img src="images/images (1).jpeg" alt=""/>
+                        </div>
+                        <div class="imgbx unseen">
+                            <img
+                                    src="images/Best-Nature-Whatsapp-Dp-Images.jpg"
+                                    alt=""
+                            />
+                        </div>
+                        <div class="imgbx seen">
+                            <img src="images/images.jpeg" alt=""/>
+                        </div>
+                        <div class="imgbx seen">
+                            <img src="images/images (3).jpeg" alt=""/>
+                        </div>
+                    </div>
+                </div>
+                <div class="block2">
+                    <div class="status">
+                        <div class="sname">My Status</div>
+                    </div>
+                    <div class="status">
+                        <div class="sname">Mom</div>
+                    </div>
+                    <div class="status">
+                        <div class="sname">Dad</div>
+                    </div>
+                    <div class="status">
+                        <div class="sname">Yashwitha</div>
+                    </div>
+                    <div class="status">
+                        <div class="sname">Divya</div>
+                    </div>
+                </div>
+                <div class="block">
+                    <div class="details">
+                        <div class="listhead">
+                            <h4>Channels</h4>
+                            <p class="symbol">
+                                <a href="">
+                                    <ion-icon name="add-outline"></ion-icon>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="block">
+                    <div class="details">
+                        <div class="listhead">
+                            <h4>
+                                <ion-icon name="logo-whatsapp"></ion-icon>
+                                WhatsApp
+                            </h4>
+                        </div>
+                        <div class="message_p">
+                            <p>
+                                Big News!! Dont wait for the chance. Grab the chance
+                                now!!!
+                            </p>
+                        </div>
+                    </div>
+                    <div class="imagebx">
+                        <img src="images/1200x630wa.png" alt=""/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block slide4 %}
+    <header>
+        <a href="" class="logo">Calls</a>
+        <div class="action">
+            <a href="">
+                <ion-icon name="camera-outline"></ion-icon>
+            </a>
+            <a href="">
+                <ion-icon name="search-outline"></ion-icon>
+            </a>
+            <div class="dropdown">
+                <a href="">
+                    <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+                </a>
+                <div class="dropdown-content" id="ellipsisDropdown">
+                    <a href="#" tabindex="0" class="dropdown-item">New Group</a>
+                    <hr>
+                    <a href="#" tabindex="0" class="dropdown-item">New Broadcast</a>
+                    <hr>
+                    <a href="#" tabindex="0" class="dropdown-item">Linked Devices</a>
+                    <hr>
+                    <a href="#" tabindex="0" class="dropdown-item">Starred Messages</a>
+                    <hr>
+                    <a href="#" tabindex="0" class="dropdown-item">Settings</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="box calls">
+        <div class="data">
+            <div class="chatlist">
+                <div class="block">
+                    <div class="imgbox green">
+                        <ion-icon name="link-outline"></ion-icon>
+                    </div>
+                    <div class="details">
+                        <div class="listhead">
+                            <h4>Create a call link</h4>
+                        </div>
+                        <div class="message_p">
+                            <p>Share a link for your WhatsApp call</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="block">
+                    <div class="details">
+                        <div class="listhead">
+                            <h4>Recent</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="block">
+                    <div class="imgbox">
+                        <img src="images/IMG_20210615_171101.jpg" alt=""/>
+                    </div>
+                    <div class="details">
+                        <div class="listhead">
+                            <h4>Divya</h4>
+                            <p class="call"></p>
+                        </div>
+                        <div class="message_p outgoing">
+                            <p>
+                                <ion-icon name="arrow-up-outline"></ion-icon>
+                                Yesterday,
+                                4:04
+                            </p>
+                        </div>
+                    </div>
+                    <ion-icon name="call-outline" class="call"></ion-icon>
+                </div>
+                <div class="block">
+                    <div class="imgbox">
+                        <img src="images/IMG_20210615_171101.jpg" alt=""/>
+                    </div>
+                    <div class="details">
+                        <div class="listhead">
+                            <h4>Srilekha</h4>
+                            <p class="call"></p>
+                        </div>
+                        <div class="message_p outgoing">
+                            <p>
+                                <ion-icon name="arrow-up-outline"></ion-icon>
+                                Yesterday,
+                                4:04
+                            </p>
+                        </div>
+                    </div>
+                    <ion-icon name="call-outline" class="call"></ion-icon>
+                </div>
+                <div class="block">
+                    <div class="imgbox">
+                        <img src="images/IMG_20210615_171101.jpg" alt=""/>
+                    </div>
+                    <div class="details">
+                        <div class="listhead">
+                            <h4>Dad</h4>
+                            <p class="call"></p>
+                        </div>
+                        <div class="message_p incoming">
+                            <p>
+                                <ion-icon name="arrow-down-outline"></ion-icon
+                                >
+                                Yesterday, 4:04
+                            </p>
+                        </div>
+                    </div>
+                    <ion-icon name="videocam-outline" class="call"></ion-icon>
+                </div>
+                <div class="block">
+                    <div class="imgbox">
+                        <img src="images/IMG_20210615_171101.jpg" alt=""/>
+                    </div>
+                    <div class="details">
+                        <div class="listhead">
+                            <h4>Mom</h4>
+                            <p class="call"></p>
+                        </div>
+                        <div class="message_p incoming">
+                            <p>
+                                <ion-icon name="arrow-down-outline"></ion-icon
+                                >
+                                Yesterday, 4:04
+                            </p>
+                        </div>
+                    </div>
+                    <ion-icon name="videocam-outline" class="call"></ion-icon>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

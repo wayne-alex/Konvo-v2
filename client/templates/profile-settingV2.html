@@ -1,0 +1,289 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Settings</title>
+    <link rel="shortcut icon" type="image/svg+xml" href="{% static 'logo.svg' %}">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --bg-color: #f9f9f9;
+            --text-color: #2b2d42;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .profile-settings-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 32px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .profile-settings-container h1 {
+            font-size: 24px;
+            color: var(--primary-color);
+            margin-bottom: 24px;
+        }
+
+        .logo {
+            margin-bottom: 20px;
+        }
+
+        .logo img {
+            width: 150px;
+        }
+
+        .avatar-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .avatar {
+            position: relative;
+            cursor: pointer;
+            width: 80px;
+            height: 80px;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            transition: border 0.3s ease;
+        }
+
+        .avatar .tick {
+            display: none;
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background-color: green;
+            color: white;
+            font-size: 14px;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar.selected img {
+            border-color: green;
+        }
+
+        .avatar.selected .tick {
+            display: flex;
+        }
+
+        .about-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .about-container label {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .about-container textarea {
+            width: 100%;
+            max-width: 450px;
+            height: 100px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 16px;
+            resize: none;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn-save:hover {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.6); /* Light grey */
+            border-top: 2px solid white; /* White */
+            border-radius: 50%;
+            margin-left: 10px;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="profile-settings-container">
+    <!-- Logo Section -->
+    <div class="logo">
+        <img src="{% static 'logo.svg' %}" alt="Konvo Logo" height="100px">
+    </div>
+
+    <h1>Profile Settings</h1>
+
+    <!-- Avatar Selection Section -->
+    <div class="avatar-container">
+        <div class="avatar" onclick="selectAvatar(this)" id="avatar1">
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp" alt="Avatar 1">
+            <div class="tick">✔</div>
+        </div>
+        <div class="avatar" onclick="selectAvatar(this)" id="avatar2">
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp" alt="Avatar 2">
+            <div class="tick">✔</div>
+        </div>
+        <div class="avatar" onclick="selectAvatar(this)" id="avatar3">
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp" alt="Avatar 3">
+            <div class="tick">✔</div>
+        </div>
+        <div class="avatar" onclick="selectAvatar(this)" id="avatar4">
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp" alt="Avatar 4">
+            <div class="tick">✔</div>
+        </div>
+        <div class="avatar" onclick="selectAvatar(this)" id="avatar5">
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava5-bg.webp" alt="Avatar 5">
+            <div class="tick">✔</div>
+        </div>
+        <div class="avatar" onclick="selectAvatar(this)" id="avatar6">
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp" alt="Avatar 6">
+            <div class="tick">✔</div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div class="about-container">
+        <label for="about">About</label>
+        <textarea id="about" name="about" placeholder="Tell us about yourself..."></textarea>
+    </div>
+
+    <!-- Save Button with Spinner -->
+    <button class="btn-save" id="saveButton" onclick="saveProfile()">
+        Save
+        <div id="spinner" class="spinner" style="display: none;"></div>
+    </button>
+</div>
+
+<script>
+    let selectedAvatar = 0; // Variable to hold the selected avatar ID
+
+    window.onload = function () {
+        // Hide all ticks when the page loads
+        const ticks = document.querySelectorAll('.avatar .tick');
+        ticks.forEach(tick => tick.style.display = 'none');
+
+        // Handle back button
+        history.pushState(null, null, location.href); // Push a state to track back navigation
+        window.onpopstate = function () {
+            // Redirect to logout if the user presses back
+            window.location.href = "{% url 'logout-v2' %}";
+        };
+    };
+
+    function selectAvatar(element) {
+        // Hide all ticks before showing the selected one
+        const ticks = document.querySelectorAll('.avatar .tick');
+        ticks.forEach(tick => tick.style.display = 'none');
+
+        // Show tick for the selected avatar
+        const tick = element.querySelector('.tick');
+        tick.style.display = 'flex';
+
+        // Update the selectedAvatar variable to the clicked avatar
+        selectedAvatar = element.id.replace('avatar', ''); // Extract avatar number (1 to 6)
+    }
+
+    function saveProfile() {
+        const aboutText = document.getElementById('about').value;
+        const saveButton = document.getElementById('saveButton');
+        const spinner = document.getElementById('spinner');
+
+        if (selectedAvatar === 0 || aboutText === '') {
+            alert('Please select an avatar and enter about text.');
+            return;
+        }
+
+        const data = {
+            about: aboutText,
+            avatar: selectedAvatar
+        };
+
+        // Disable button and show spinner
+        saveButton.disabled = true;
+        spinner.style.display = 'block';
+
+        fetch('/profile-setting/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Profile saved successfully!');
+                    window.location.href = "{% url 'dashboard-v2' %}";
+                } else {
+                    alert('Failed to save profile.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while saving the profile.');
+            })
+            .finally(() => {
+                // Enable button and hide spinner
+                saveButton.disabled = false;
+                spinner.style.display = 'none';
+            });
+    }
+</script>
+
+
+</body>
+</html>

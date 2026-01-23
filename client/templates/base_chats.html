@@ -1,0 +1,371 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script
+            type="module"
+            src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+            nomodule
+            src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+    <link rel="stylesheet" href="{% static 'Login/whatsapp/style.css' %}"/>
+    <link rel="manifest" href="{% static 'manifest.json' %}">
+    <link rel="stylesheet" href='https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css'/>
+    <link rel="shortcut icon" href="{% static 'login/images/whatsapp.png' %}" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>Konvo</title>
+</head>
+<body>
+<style>
+    :root {
+        --whatsapp-bg: #121B22;
+        --whatsapp-header: #1F2C34;
+        --whatsapp-active: #00A884;
+        --whatsapp-text: #E9EDEF;
+        --whatsapp-secondary: #8696A0;
+        --unread-badge: #00A884;
+    }
+
+    body {
+        background-color: var(--whatsapp-bg);
+        color: var(--whatsapp-text);
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        padding-bottom: 60px; /* Space for bottom tabs */
+    }
+
+    header {
+        background-color: var(--whatsapp-header);
+        padding: 10px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo {
+        color: var(--whatsapp-text);
+        text-decoration: none;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .action {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+    }
+
+    .action a {
+        color: var(--whatsapp-text);
+        text-decoration: none;
+    }
+
+    .action ion-icon {
+        font-size: 24px;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: var(--whatsapp-header);
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: var(--whatsapp-secondary);
+        font-size: 12px;
+        gap: 4px;
+        position: relative;
+    }
+
+    .nav-item.active {
+        color: var(--whatsapp-active);
+    }
+
+    .nav-item ion-icon {
+        font-size: 24px;
+    }
+
+    .unread-badge {
+        position: absolute;
+        top: -2px;
+        right: calc(50% - 20px);
+        background-color: var(--unread-badge);
+        color: white;
+        border-radius: 50%;
+        padding: 2px 6px;
+        font-size: 10px;
+        min-width: 8px;
+        text-align: center;
+    }
+
+    /* Floating Action Button */
+
+
+    .fab ion-icon {
+        color: white;
+        font-size: 24px;
+    }
+
+    .swiper {
+        flex: 1;
+    }
+
+    /* Dropdown styles */
+    .dropdown-content {
+        position: absolute;
+        right: 10px; /* Align with button */
+        top: 40px; /* Adjust below the button */
+        z-index: 1000;
+        display: none; /* Initially hidden */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+
+    .dropdown-content a {
+        color: var(--whatsapp-text);
+    }
+
+    .dropdown-content hr {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .dropdown-content a:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-item.active {
+        color: var(--whatsapp-active);
+    }
+
+</style>
+
+<div class="container">
+
+
+    <div class="swiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">{% block slide2 %}{% endblock %}</div>
+            <div class="swiper-slide">{% block slide3 %}{% endblock %}</div>
+            <div class="swiper-slide">{% block slide1 %}{% endblock %}</div>
+            <div class="swiper-slide">{% block slide4 %}{% endblock %}</div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active" data-tab="chats">
+            <ion-icon name="chatbubble"></ion-icon>
+            <span>Chats</span>
+            <span class="unread-badge">599</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="updates">
+            <ion-icon name="camera-outline"></ion-icon>
+            <span>Updates</span>
+            <span class="unread-badge">1</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="communities">
+            <ion-icon name="people-outline"></ion-icon>
+            <span>Communities</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="calls">
+            <ion-icon name="call-outline"></ion-icon>
+            <span>Calls</span>
+        </a>
+    </nav>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+    // Initialize Swiper
+    var swiper = new Swiper('.swiper', {
+        effect: 'cube',
+        grabCursor: true,
+        cubeEffect: {
+            shadow: false,
+            slideShadows: true,
+            shadowOffset: 20,
+            shadowScale: 0.94,
+        },
+    });
+
+    // Bottom Navigation functionality
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach((item, index) => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Remove active class from all items
+            navItems.forEach(nav => nav.classList.remove('active'));
+            // Add active class to clicked item
+            item.classList.add('active');
+            // Switch to corresponding slide
+            swiper.slideTo(index);
+        });
+    });
+
+    // Update active tab on slide change
+    swiper.on('slideChange', () => {
+        const activeIndex = swiper.activeIndex;
+        navItems.forEach(nav => nav.classList.remove('active'));
+        navItems[activeIndex].classList.add('active');
+    });
+
+    // Dropdown functionality
+    function toggleDropdown() {
+        const dropdown = document.getElementById("ellipsisDropdown");
+        dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+    }
+
+    // Close the dropdown if clicked outside
+    document.addEventListener("click", (event) => {
+        const button = document.getElementById("ellipsisButton");
+        const dropdown = document.getElementById("ellipsisDropdown");
+
+        if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+            dropdown.style.display = "none";
+        }
+    });
+
+    // Highlight the active tab
+    document.querySelectorAll(".nav-item").forEach((item) => {
+        item.addEventListener("click", (event) => {
+            // Remove 'active' class from all nav items
+            document.querySelectorAll(".nav-item").forEach((tab) => {
+                tab.classList.remove("active");
+            });
+
+            // Add 'active' class to the clicked tab
+            item.classList.add("active");
+        });
+    });
+
+    function updateChats() {
+        fetch('/chat-updates/')
+            .then(response => response.json())
+            .then(data => {
+                const chatContainer = document.querySelector('.data');
+                chatContainer.innerHTML = '';
+
+                data.chat_previews.forEach(chat => {
+                    const chatElement = document.createElement('div');
+                    chatElement.style.display = 'flex';
+                    chatElement.style.alignItems = 'center';
+                    chatElement.style.padding = '10px';
+                    chatElement.style.borderBottom = '1px solid #ccc';
+                    chatElement.style.cursor = 'pointer';
+
+
+                    chatElement.onclick = () => {
+                        window.location.href = `/open-chat/${chat.chat_id}/`;
+                    };
+
+                    // Profile Picture
+                    const profilePic = document.createElement('div');
+                    profilePic.style.width = '50px';
+                    profilePic.style.height = '50px';
+                    profilePic.style.borderRadius = '50%';
+                    profilePic.style.marginRight = '10px';
+                    profilePic.style.backgroundImage = `url('${chat.profile_picture}')`;
+                    profilePic.style.backgroundSize = 'cover';
+                    profilePic.style.backgroundPosition = 'center';
+
+                    // Text Content
+                    const textContent = document.createElement('div');
+                    textContent.style.flexGrow = '1';
+
+                    const userName = document.createElement('div');
+                    userName.style.fontWeight = 'bold';
+                    userName.style.color = 'black';
+                    userName.textContent = chat.user_name;
+
+                    const recentMessage = document.createElement('div');
+                    recentMessage.style.color = '#333';
+                    recentMessage.style.fontSize = '12px';
+                    recentMessage.textContent = chat.recent_message;
+
+                    // Time and Unread Count Container
+                    const timeUnreadContainer = document.createElement('div');
+                    timeUnreadContainer.style.display = 'flex';
+                    timeUnreadContainer.style.flexDirection = 'column';
+                    timeUnreadContainer.style.alignItems = 'center';
+
+                    // Sent Time
+                    const sentTime = document.createElement('div');
+                    sentTime.style.fontSize = '10px';
+                    sentTime.style.color = '#25D366';
+                    sentTime.style.textAlign = 'center';
+                    sentTime.style.marginBottom = '5px';
+                    sentTime.textContent = chat.sent_time;
+
+                    // Unread Count
+                    const unreadCount = document.createElement('div');
+                    unreadCount.style.backgroundColor = '#25D366';
+                    unreadCount.style.color = '#fff';
+                    unreadCount.style.borderRadius = '50%';
+                    unreadCount.style.width = '20px';
+                    unreadCount.style.height = '20px';
+                    unreadCount.style.display = 'flex';
+                    unreadCount.style.justifyContent = 'center';
+                    unreadCount.style.alignItems = 'center';
+                    unreadCount.style.fontSize = '12px';
+
+                    // Hide unread count if it's 0
+                    if (chat.unread_count > 0) {
+                        unreadCount.textContent = chat.unread_count;
+                    } else {
+                        unreadCount.style.display = 'none';
+                    }
+
+                    // Assemble the elements
+                    textContent.appendChild(userName);
+                    textContent.appendChild(recentMessage);
+
+                    timeUnreadContainer.appendChild(sentTime);
+                    timeUnreadContainer.appendChild(unreadCount);
+
+                    chatElement.appendChild(profilePic);
+                    chatElement.appendChild(textContent);
+                    chatElement.appendChild(timeUnreadContainer);
+
+                    chatContainer.appendChild(chatElement);
+                });
+            })
+            .catch(error => console.error('Error fetching chat updates:', error));
+    }
+
+    // Update chats every second
+    setInterval(updateChats, 1000);
+
+
+</script>
+
+</body>
+</html>
